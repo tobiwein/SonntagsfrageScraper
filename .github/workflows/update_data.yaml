@@ -5,6 +5,10 @@ on:
     - cron: '0 0 * * 0' # Runs every Sunday at midnight
   workflow_dispatch: # Allows manual triggering of the workflow
 
+env:
+  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  BRANCH: auto_data_update
+
 jobs:
   update-data:
     runs-on: ubuntu-latest
@@ -13,7 +17,7 @@ jobs:
     - name: Checkout repository
       uses: actions/checkout@v4
       with:
-        ref: auto_data_update
+        ref: ${{ env.BRANCH }}
 
     - name: Set up Python
       uses: actions/setup-python@v5
@@ -30,7 +34,7 @@ jobs:
       run: |
         python scripts/main.py
 
-    - name: Check for changes
+    - name: Commit and push changes
       run: |
         git config --global user.name 'github-actions[bot]'
         git config --global user.email 'github-actions[bot]@users.noreply.github.com'
@@ -40,11 +44,5 @@ jobs:
           exit 0
         else
           git commit -m 'Automated data update'
+          git push origin ${{ env.BRANCH }}
         fi
-
-    - name: Commit and push changes
-      if: success()
-      run: |
-        git push origin auto_data
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
