@@ -3,6 +3,7 @@ from collections import defaultdict
 from datetime import datetime
 import matplotlib.pyplot as plt
 import numpy as np
+
 import survey_scrape
 
 data_rows, collection_method, parties = survey_scrape.extract_data()
