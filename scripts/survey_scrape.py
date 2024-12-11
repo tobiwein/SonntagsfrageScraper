@@ -176,7 +176,7 @@ def extract_data():
     Extracts and processes the survey data from the website.
 
     Returns:
-    tuple: A tuple containing the party data and date data.
+    dict: A dictionary containing the processed party data.
     """
     soup = get_soup(survey_url)
     data_rows = extract_rows(soup)
