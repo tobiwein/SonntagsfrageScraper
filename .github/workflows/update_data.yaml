@@ -38,12 +38,13 @@ jobs:
         if git diff-index --quiet HEAD; then
           echo "No changes to commit"
           exit 0
+        else
+          git commit -m 'Automated data update'
         fi
 
     - name: Commit and push changes
       if: success()
       run: |
-        git commit -m 'Automated data update'
         git push origin auto_data
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
