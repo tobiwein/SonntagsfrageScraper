@@ -2,19 +2,9 @@
 
 import requests
 from bs4 import BeautifulSoup
+from datetime import datetime
 
 survey_url = "https://www.wahlrecht.de/umfragen/"
-party_colors = {
-        "CDU/CSU": "#000000",
-        "SPD": "#E3000F",
-        "GRÜNE": "#64A12D",
-        "FDP": "#FFED00",
-        "DIE LINKE": "#8C3473",
-        "AfD": "#009EE0",
-        "BSW": "#FFD700",
-        "FW": "#000000",
-        "Sonstige": "#808080"
-    }
 
 def get_soup(url):
     response = requests.get(url)
@@ -90,9 +80,19 @@ def combine_party_with_date(dates, party_data):
         
     return combined_data
 
-def add_colors(party_data):
+def sort_data(party_data):
     for party, data in party_data.items():
-        party_data[party]["color"] = party_colors[party]
+        sorted_dates = sorted(data.items(), key=lambda x: datetime.strptime(x[0], "%d.%m.%Y"))
+        sorted_data = {date: values for date, values in sorted_dates}
+        party_data[party] = sorted_data
+    return party_data
+
+def extract_min_max(party_data):
+    for party, data in party_data.items():
+        for date, values in data.items():
+            min_value = min(values)
+            max_value = max(values)
+            party_data[party][date] = (min_value, max_value)
     return party_data
 
 def extract_data():
@@ -101,5 +101,6 @@ def extract_data():
     dates = extract_dates(data_rows)
     party_data_raw, collection_method_data_raw = extract_parties(data_rows)
     party_data = combine_party_with_date(dates, party_data_raw)
-    party_data = add_colors(party_data)
+    party_data = sort_data(party_data)
+    party_data = extract_min_max(party_data)
     return party_data
