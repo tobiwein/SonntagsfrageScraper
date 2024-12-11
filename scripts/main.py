@@ -6,7 +6,7 @@ import numpy as np
 
 import survey_scrape
 
-party_data = survey_scrape.extract_data()
+party_data, date_data = survey_scrape.extract_data()
 
 
 
