@@ -6,26 +6,7 @@ import numpy as np
 
 import survey_scrape
 
-data_rows, collection_method, parties = survey_scrape.extract_data()
-
-# Extrahiere die Daten aus den Tabellenzeilen
-for tr, row in enumerate(data_rows):
-    # Extrahiere die Spalten
-    header = row.find("th")
-    columns = row.find_all("td")
-    # Extrahiere den Text aus den Spalten
-    head_data = [header.get_text() for th, header in enumerate(header)]
-    col_data = [column.get_text() for td, column in enumerate(columns)]
-
-    # Entferne unnötige Zeichen aus den Daten
-    if col_data:
-        col_data = col_data[1:-2]
-        col_data = [data.replace("\n", "").replace("\r", "").replace("\t", "") for data in col_data]
-        extracted_data.append(col_data)
-
-        # Extrahiere die Parteien
-        if head_data and tr != 0:
-            parties.append(head_data[0])
+party_data = survey_scrape.extract_data()
 
 # Extrahiere die Datumszeile und wandle in Datetime-Objekte
 dates = [datetime.strptime(datum, "%d.%m.%Y") for datum in extracted_data[0]]
