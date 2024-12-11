@@ -7,8 +7,6 @@ import logging
 
 logging.basicConfig(level=logging.INFO)
 
-survey_url = "https://www.wahlrecht.de/umfragen/"
-
 def get_soup(url):
     """
     Fetches the HTML content from the given URL and returns a BeautifulSoup object.
@@ -171,14 +169,17 @@ def extract_min_max(party_data):
             party_data[party][date] = (min_value, max_value)
     return party_data
 
-def extract_data():
+def extract_data(url):
     """
     Extracts and processes the survey data from the website.
+
+    Parameters:
+    url (str): The URL to fetch the survey data from.
 
     Returns:
     dict: A dictionary containing the processed party data.
     """
-    soup = get_soup(survey_url)
+    soup = get_soup(url)
     data_rows = extract_rows(soup)
     dates = extract_dates(data_rows)
     party_data_raw, collection_method_data_raw = extract_parties(data_rows)

@@ -7,25 +7,13 @@ import matplotlib.dates as mdates
 import numpy as np
 from datetime import datetime
 
-# Define party colors
-party_colors = {
-    "CDU/CSU": "black",
-    "SPD": "red",
-    "AfD": "blue",
-    "FDP": "yellow",
-    "DIE LINKE": "purple",
-    "GRUENE": "green",
-    "Sonstige": "gray",
-    "BSW": "orange",
-    "FW": "brown",
-}    
-
-def plot_party_data(party_data):
+def plot_party_data(party_data, party_colors):
     """
     Plots the party data with filled areas, lines, and average lines.
 
     Parameters:
     party_data (dict): A dictionary containing party data with dates and percentage ranges.
+    party_colors (dict): A dictionary containing party names and corresponding colors.
     """
     plt.figure(figsize=(12, 8))
     plt.title("Sonntagsumfrage")
