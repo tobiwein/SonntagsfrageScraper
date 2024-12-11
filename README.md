@@ -30,7 +30,7 @@ python main.py
 
 ## Example Output
 
-![Example Output](path/to/your/image.png)
+![Example Output](images/readme_example_output.png)
 
 ## Functions
 
