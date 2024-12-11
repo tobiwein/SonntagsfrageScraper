@@ -66,6 +66,8 @@ def store_party_data(party_data, file):
             for party, values in data.items():
                 f.write(f"{party}: {values}\n")
 
+    return combined_data
+
 def load_party_data(file):
     """
     Loads party data from the database.
