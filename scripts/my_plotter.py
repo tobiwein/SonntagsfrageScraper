@@ -14,7 +14,7 @@ party_colors = {
     "AfD": "blue",
     "FDP": "yellow",
     "DIE LINKE": "purple",
-    "GRÜNE": "green",
+    "GRUENE": "green",
     "Sonstige": "gray",
     "BSW": "orange",
     "FW": "brown",
@@ -91,6 +91,6 @@ def plot_party_data(party_data):
     plt.gca().set_xticks(sorted_dates)
     plt.gca().set_xticklabels([date.strftime('%d.%m.%Y') for date in sorted_dates], rotation=45)
 
-    plt.legend(loc='upper left', bbox_to_anchor=(1, 1), borderaxespad=0.)
+    plt.legend(loc='upper left', bbox_to_anchor=(1, 1), borderaxespad=0.3)
     plt.tight_layout()
     plt.show()

@@ -96,8 +96,11 @@ def extract_parties(data_rows):
             continue
 
         percentages.pop(0)
+        header_text = header.get_text()
+        if header_text == "GRÜNE":
+            header_text = "GRUENE"
         cleaned_percentage = clean_percentages(percentages)
-        parties[header.get_text()] = cleaned_percentage
+        parties[header_text] = cleaned_percentage
             
     return parties, collection_method_data
 
@@ -168,24 +171,6 @@ def extract_min_max(party_data):
             party_data[party][date] = (min_value, max_value)
     return party_data
 
-def transform_to_date_data(party_data):
-    """
-    Transforms the party data to be indexed by dates.
-
-    Parameters:
-    party_data (dict): A dictionary of party data.
-
-    Returns:
-    dict: A dictionary of data indexed by dates.
-    """
-    date_data = {}
-    for party, data in party_data.items():
-        for date, values in data.items():
-            if date_data.get(date) is None:
-                date_data[date] = {}
-            date_data[date][party] = values
-    return date_data
-
 def extract_data():
     """
     Extracts and processes the survey data from the website.
@@ -200,5 +185,4 @@ def extract_data():
     party_data = combine_party_with_date(dates, party_data_raw)
     party_data = sort_data(party_data)
     party_data = extract_min_max(party_data)
-    date_data = transform_to_date_data(party_data)
-    return party_data, date_data
+    return party_data
