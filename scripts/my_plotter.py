@@ -4,8 +4,15 @@ This module contains functions for plotting party data.
 
 import matplotlib.pyplot as plt
 import matplotlib.dates as mdates
-import numpy as np
+from dotenv import load_dotenv
 from datetime import datetime
+import numpy as np
+import os
+
+load_dotenv("var.env")
+title = os.getenv("PLOT_TITLE")
+xlabel = os.getenv("PLOT_X_LABEL")
+ylabel = os.getenv("PLOT_Y_LABEL")
 
 def plot_party_data(party_data, party_colors):
     """
@@ -15,10 +22,11 @@ def plot_party_data(party_data, party_colors):
     party_data (dict): A dictionary containing party data with dates and percentage ranges.
     party_colors (dict): A dictionary containing party names and corresponding colors.
     """
+
     plt.figure(figsize=(12, 8))
-    plt.title("Sonntagsumfrage")
-    plt.xlabel("Datum")
-    plt.ylabel("Umfrageergebnis in %")
+    plt.title(title)
+    plt.xlabel(xlabel)
+    plt.ylabel(ylabel)
     plt.grid(True, which='both', linestyle='--', linewidth=0.5)
     plt.subplots_adjust(left=0.1, bottom=0.2, right=0.9, top=0.9)
     plt.xticks(rotation=45)
