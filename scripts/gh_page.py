@@ -48,4 +48,15 @@ def create_html_from_data(file):
     # Create the plot
     fig = px.line(df, x='date', y='percentage', color='party', title=f'Sonntagsfrage trends (Last update: {last_update})',
                  labels={'date': 'Date', 'value': 'Percentage', 'party': 'Party'},)
+    # Add red background below y = 5
+    fig.add_shape(
+        type="rect",
+        x0=df["x"].min(),
+        x1=df["x"].max(),
+        y0=0,
+        y1=5,
+        fillcolor="red",
+        opacity=0.2,
+        layer="below"
+    )
     fig.write_html('docs/index.html')
