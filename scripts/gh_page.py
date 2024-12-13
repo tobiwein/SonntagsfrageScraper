@@ -27,6 +27,9 @@ def create_html_from_data(file):
     df['date'] = pd.to_datetime(df['date'], format='%d.%m.%Y')
     df = df.sort_values(by='date').tail(DATA_POINTS)
 
+    # Get the date of the last update
+    last_update = df['date'].max().strftime('%d.%m.%Y')
+
     # Create the plot
-    fig = px.line(df, x='date', y=['min', 'max'], color='party', title='Sonntagsfrage Trends')
+    fig = px.line(df, x='date', y=['min', 'max'], color='party', title=f'Sonntagsfrage trends (Last update: {last_update})')
     fig.write_html('docs/index.html')
