@@ -1,5 +1,5 @@
 """
-
+This script is responsible for creating the HTML file that is used to display the data on the GitHub page.
 """
 
 import pandas as pd

@@ -1,7 +1,6 @@
 name: GitHub Page Update
 
 on:
-  push:
   workflow_run:
     workflows: ["Update Data"]
     types: [requested]
