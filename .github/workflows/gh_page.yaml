@@ -2,9 +2,6 @@ name: GitHub Page Update
 
 on:
   push:
-    branches:
-      - 'main'
-      - 'auto_data_update'
   workflow_run:
     workflows: ["Update Data"]
     types: [requested]
