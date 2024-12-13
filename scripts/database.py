@@ -2,6 +2,8 @@
 This module contains functions for interacting with the database.
 """
 
+import re
+
 def transform_to_date_data(party_data):
     """
     Transforms the party data to be indexed by dates.
@@ -70,22 +72,32 @@ def store_party_data(party_data, file):
 
 def load_party_data(file):
     """
-    Loads party data from the database.
+    Loads and cleans party data from the database.
 
     Parameters:
     file (str): The path to the database file.
 
     Returns:
-    dict: A dictionary of party data.
+    dict: A dictionary of cleaned party data.
     """
     party_data = {}
+    date_pattern = r"\d{2}\.\d{2}\.\d{4}"  # Regex for DD.MM.YYYY format
+
     with open(file, "r") as f:
         for line in f:
             if ":" in line:
                 party, values = line.strip().split(": ")
-                if party_data.get(party) is None:
-                    party_data[party] = {}
-                party_data[party][date] = eval(values)
+                try:
+                    values = eval(values)
+                    if not isinstance(values, tuple) or len(values) != 2:
+                        raise ValueError("Invalid data format for party values.")
+                    if party_data.get(party) is None:
+                        party_data[party] = {}
+                    party_data[party][date] = values
+                except Exception as e:
+                    print(f"Error parsing data for party {party}: {e}")
             else:
                 date = line.strip()
+                if not re.match(date_pattern, date):
+                    print(f"Invalid date format: {date}")
     return party_data
