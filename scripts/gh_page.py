@@ -23,9 +23,11 @@ def create_html_from_data(file):
     # Convert the transformed data to a DataFrame
     df = pd.DataFrame(transformed_data)
 
-    # Sort the DataFrame by date and get the last X data points
+    # Sort the DataFrame by date and get the last X unique dates
     df['date'] = pd.to_datetime(df['date'], format='%d.%m.%Y')
-    df = df.sort_values(by='date').tail(DATA_POINTS)
+    unique_dates = df['date'].drop_duplicates().nlargest(DATA_POINTS)
+    df = df[df['date'].isin(unique_dates)]
+    df = df.sort_values(by='date')
 
     # Get the date of the last update
     last_update = df['date'].max().strftime('%d.%m.%Y')
