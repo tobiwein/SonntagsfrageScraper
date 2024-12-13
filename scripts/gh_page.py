@@ -33,6 +33,9 @@ def create_html_from_data(file):
     # Get the date of the last update
     last_update = datetime.now().strftime('%d.%m.%Y %H:%M:%S')
 
+    # Create the plot
+    fig = px.line(df, x='date', y='percentage', color='party', title=f'Sonntagsfrage trends (Last update: {last_update})',
+                 labels={'date': 'Date', 'value': 'Percentage', 'party': 'Party'},)
     # Add red background below y = 5
     fig.add_shape(
         type="rect",
@@ -44,8 +47,4 @@ def create_html_from_data(file):
         opacity=0.2,
         layer="below"
     )
-
-    # Create the plot
-    fig = px.line(df, x='date', y='percentage', color='party', title=f'Sonntagsfrage trends (Last update: {last_update})',
-                 labels={'date': 'Date', 'value': 'Percentage', 'party': 'Party'},)
     fig.write_html('docs/index.html')
