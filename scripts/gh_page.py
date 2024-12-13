@@ -19,7 +19,7 @@ def create_html_from_data(file):
     transformed_data = []
     for party, date_data in party_data.items():
         for date, values in date_data.items():
-            transformed_data.append({"date": date, "party": party, "min": values[0], "max": values[1]})
+            transformed_data.append({"date": date, "party": party, "percentage": (values[0] + values[1]) / 2})
 
     # Convert the transformed data to a DataFrame
     df = pd.DataFrame(transformed_data)
@@ -34,6 +34,6 @@ def create_html_from_data(file):
     last_update = datetime.now().strftime('%d.%m.%Y %H:%M:%S')
 
     # Create the plot
-    fig = px.line(df, x='date', y=['min', 'max'], color='party', title=f'Sonntagsfrage trends (Last update: {last_update})',
+    fig = px.line(df, x='date', y='percentage', color='party', title=f'Sonntagsfrage trends (Last update: {last_update})',
                  labels={'date': 'Date', 'value': 'Percentage', 'party': 'Party'},)
     fig.write_html('docs/index.html')
