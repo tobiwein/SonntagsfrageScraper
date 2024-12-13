@@ -3,7 +3,7 @@ name: GitHub Page Update
 on:
   workflow_run:
     workflows: ["Update Data"]
-    types: [completed]
+    types: [requested]
     branches:
       - 'main'
       - 'auto_data_update'
