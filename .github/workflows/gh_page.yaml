@@ -1,6 +1,10 @@
 name: GitHub Page Update
 
 on:
+  push:
+    branches:
+      - 'main'
+      - 'auto_data_update'
   workflow-run:
     workflows: ["Update Data"]
     types: [requested]
@@ -34,10 +38,10 @@ jobs:
           pip install -r requirements.txt
 
       - name: Generate Visualizations
-        run: python generate_visualizations.py
+        run: python generate_html.py
 
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./output  # Verzeichnis mit generierten HTML-Dateien
+          publish_dir: ./public
