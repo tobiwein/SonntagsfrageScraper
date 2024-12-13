@@ -1,16 +1,17 @@
 """
-Main script to extract survey data and plot it.
+Main script to plot the extracted survey data.
 """
 
-import survey_scrape
-import my_plotter as plt
-import database as db
+from scripts import database as db
+from scripts import my_plotter as plt
+from dotenv import load_dotenv
+import os
 import logging
 
+load_dotenv("var.env")
 logging.basicConfig(level=logging.INFO)
 
-url = "https://www.wahlrecht.de/umfragen/"
-file = "./data/date_data.txt"
+file = os.getenv("DATABASE_FILE")
 party_colors = {
     "CDU/CSU": "black",
     "SPD": "red",
@@ -21,12 +22,11 @@ party_colors = {
     "Sonstige": "gray",
     "BSW": "orange",
     "FW": "brown"
-} 
+}
 
 def main():
     try:
-        party_data = survey_scrape.extract_data(url)
-        party_data = db.store_party_data(party_data, file)
+        party_data = db.load_party_data(file)
         plt.plot_party_data(party_data, party_colors)
     except Exception as e:
         logging.error(f"An error occurred: {e}")
