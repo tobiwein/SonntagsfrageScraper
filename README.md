@@ -14,6 +14,25 @@ SonntagsfrageScraper is a lightweight and efficient tool for scraping, analyzing
 
 **Customizable**: Easily adaptable to include new data sources or modify visualization preferences.
 
+## Data Storage
+
+The scraped data is stored in a simple, human-readable format that organizes polling results chronologically. Each entry represents the results of a poll conducted on a specific date, followed by the percentages for each political party or grouping. The data is structured as key-value pairs, where the party names are the keys, and the values are tuples containing the poll percentages (`min`, `max` values).
+
+```
+22.11.2024
+CDU/CSU: (37.0, 37.0)
+SPD: (15.0, 15.0)
+GRUENE: (10.0, 10.0)
+...
+29.11.2024
+CDU/CSU: (32.0, 32.0)
+SPD: (15.0, 15.0)
+GRUENE: (13.0, 13.0)
+...
+```
+
+This format makes it easy to parse, update, and analyze the data programmatically while maintaining simplicity for manual inspection.
+
 ## GitHub Actions
 
 The repository includes a scheduled GitHub Action configured to run weekly on the `auto_data_update` branch. This action fetches the latest data and ensures the repository stays up-to-date without manual intervention.
