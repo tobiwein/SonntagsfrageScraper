@@ -31,5 +31,6 @@ def create_html_from_data(file):
     last_update = df['date'].max().strftime('%d.%m.%Y')
 
     # Create the plot
-    fig = px.line(df, x='date', y=['min', 'max'], color='party', title=f'Sonntagsfrage trends (Last update: {last_update})')
+    fig = px.line(df, x='date', y=['min', 'max'], color='party', title=f'Sonntagsfrage trends (Last update: {last_update})',
+                 labels={'date': 'Date', 'value': 'Percentage', 'party': 'Party'},)
     fig.write_html('docs/index.html')
