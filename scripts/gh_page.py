@@ -7,6 +7,7 @@ import plotly.express as px
 from scripts import database as db
 from dotenv import load_dotenv
 import os
+from datetime import datetime
 
 load_dotenv("var.env")
 DATA_POINTS = int(os.getenv("DATA_POINTS", 10))
@@ -30,7 +31,7 @@ def create_html_from_data(file):
     df = df.sort_values(by='date')
 
     # Get the date of the last update
-    last_update = df['date'].max().strftime('%d.%m.%Y')
+    last_update = datetime.now().strftime('%d.%m.%Y %H:%M:%S')
 
     # Create the plot
     fig = px.line(df, x='date', y=['min', 'max'], color='party', title=f'Sonntagsfrage trends (Last update: {last_update})',
