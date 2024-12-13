@@ -29,4 +29,4 @@ def create_html_from_data(file):
 
     # Create the plot
     fig = px.line(df, x='date', y=['min', 'max'], color='party', title='Sonntagsfrage Trends')
-    fig.write_html('public/index.html')
+    fig.write_html('docs/index.html')
