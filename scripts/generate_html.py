@@ -41,11 +41,11 @@ def create_html_from_data(file):
     df['party'] = df.apply(lambda row: f"{row['party']} ({row['percentage_latest']:.1f}%)", axis=1)
 
     # Create the plot
-    fig = px.line(df, x='date', y='percentage', color='party', title=f'Sonntagsfrage (Last update: {last_update})',
-                 labels={'date': 'Date', 'value': 'Percentage', 'party': 'Party'},)
+    fig = px.line(df, x='date', y='percentage', text='percentage', color='party', title=f'Sonntagsfrage (Last update: {last_update})',
+                 labels={'date': 'Date', 'value': 'Percentage', 'party': 'Party'}, markers=True)
 
     # Add error bars for uncertainty
-    fig.update_traces(error_y=dict(type='data', array=df['uncertainty'], visible=True))
+    fig.update_traces(error_y=dict(type='date', array=df['uncertainty'], visible=True))
 
     # Add red background below y = 5
     fig.add_shape(
