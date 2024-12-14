@@ -19,7 +19,9 @@ def create_html_from_data(file):
     transformed_data = []
     for party, date_data in party_data.items():
         for date, values in date_data.items():
-            transformed_data.append({"date": date, "party": party, "percentage": (values[0] + values[1]) / 2})
+            average_percentage = (values[0] + values[1]) / 2
+            uncertainty = abs(values[0] - values[1])
+            transformed_data.append({"date": date, "party": party, "percentage": average_percentage, "uncertainty": uncertainty})
 
     # Convert the transformed data to a DataFrame
     df = pd.DataFrame(transformed_data)
@@ -33,9 +35,16 @@ def create_html_from_data(file):
     # Get the date of the last update
     last_update = datetime.now().strftime('%d.%m.%Y %H:%M:%S')
 
+    # Get the latest percentage for each party
+    latest_percentages = df.sort_values('date').groupby('party').last().reset_index()
+    df = df.merge(latest_percentages[['party', 'percentage']], on='party', suffixes=('', '_latest'))
+    df['party'] = df.apply(lambda row: f"{row['party']} ({row['percentage_latest']:.1f}%)", axis=1)
+
     # Create the plot
-    fig = px.line(df, x='date', y='percentage', color='party', title=f'Sonntagsfrage trends (Last update: {last_update})',
-                 labels={'date': 'Date', 'value': 'Percentage', 'party': 'Party'},)
+    fig = px.line(df, x='date', y='percentage', color='party', title=f'Sonntagsfrage (Last update: {last_update})',
+                 labels={'date': 'Date', 'value': 'Percentage', 'party': 'Party'},
+                 markers=True, error_y='uncertainty')
+
     # Add red background below y = 5
     fig.add_shape(
         type="rect",
@@ -47,4 +56,19 @@ def create_html_from_data(file):
         opacity=0.2,
         layer="below"
     )
+
+    # Add vertical lines at each date
+#    for date in df['date'].unique():
+#        fig.add_shape(
+#            type="line",
+#            x0=date,
+#            x1=date,
+#            y0=0,
+#            y1=1,
+#            xref='x',
+#            yref='paper',
+#            line=dict(color="LightSeaGreen", width=1),
+#            layer="below"
+#        )
+
     fig.write_html('docs/index.html')
