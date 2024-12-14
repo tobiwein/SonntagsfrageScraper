@@ -57,4 +57,18 @@ def create_html_from_data(file):
         opacity=0.2,
         layer="below"
     )
+
+    # Add vertical lines at each date
+    for date in df['date'].unique():
+        fig.add_shape(
+            type="line",
+            x0=date,
+            x1=date,
+            y0=0,
+            y1=1,
+            xref='x',
+            yref='paper',
+            line=dict(color="LightSeaGreen", width=1)
+        )
+
     fig.write_html('docs/index.html')
