@@ -11,7 +11,7 @@ on:
 
 env:
   GITHUB_TOKEN: ${{ secrets.BOT_PAT }}
-  BRANCH: gh-page
+  BRANCH: 'auto_data_update'
 
 jobs:
   deploy:
@@ -34,9 +34,7 @@ jobs:
           pip install -r requirements.txt
 
       - name: Generate Visualizations
-        run: |
-          mkdir docs
-          python generate_html.py
+        run: python generate_html.py
 
       - name: Commit and push changes
         run: |
