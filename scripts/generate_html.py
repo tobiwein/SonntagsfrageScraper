@@ -5,6 +5,7 @@ This script is responsible for creating the HTML file that is used to display th
 import pandas as pd
 import plotly.express as px
 from scripts import database as db
+from analyze import party_colors
 from dotenv import load_dotenv
 import os
 from datetime import datetime
@@ -44,7 +45,7 @@ def create_html_from_data(file):
     # Create the plot
     fig = px.line(df, x='date', y='percentage', color='party', title=f'Sonntagsfrage (Last update: {last_update}), Source: <a href="{SURVEY_URL}">Wahlrecht.de</a>',
                  labels={'date': 'Date', 'value': 'Percentage', 'party': 'Party'},
-                 markers=True, error_y='uncertainty')
+                 markers=True, error_y='uncertainty', color_discrete_map=party_colors)
 
     # Add red background below y = 5
     fig.add_shape(
