@@ -20,7 +20,7 @@ def create_html_from_data(file):
     for party, date_data in party_data.items():
         for date, values in date_data.items():
             average_percentage = (values[0] + values[1]) / 2
-            uncertainty = abs(values[0] - values[1])
+            uncertainty = abs(values[0] - values[1]) / 2
             transformed_data.append({"date": date, "party": party, "percentage": average_percentage, "uncertainty": uncertainty})
 
     # Convert the transformed data to a DataFrame
