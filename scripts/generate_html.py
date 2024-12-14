@@ -11,6 +11,7 @@ from datetime import datetime
 
 load_dotenv("var.env")
 DATA_POINTS = int(os.getenv("DATA_POINTS", 10))
+SURVEY_URL = os.getenv("SURVEY_URL", "https://www.wahlrecht.de/umfragen/")
 
 def create_html_from_data(file):
     party_data = db.load_party_data(file)
@@ -41,7 +42,7 @@ def create_html_from_data(file):
     df['party'] = df.apply(lambda row: f"{row['party']} ({row['percentage_latest']:.1f}%)", axis=1)
 
     # Create the plot
-    fig = px.line(df, x='date', y='percentage', color='party', title=f'Sonntagsfrage (Last update: {last_update})',
+    fig = px.line(df, x='date', y='percentage', color='party', title=f'Sonntagsfrage (Last update: {last_update}), Source: <a href="{SURVEY_URL}">Wahlrecht.de</a>',
                  labels={'date': 'Date', 'value': 'Percentage', 'party': 'Party'},
                  markers=True, error_y='uncertainty')
 
