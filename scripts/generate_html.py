@@ -68,7 +68,8 @@ def create_html_from_data(file):
             y1=1,
             xref='x',
             yref='paper',
-            line=dict(color="LightSeaGreen", width=1)
+            line=dict(color="LightSeaGreen", width=1),
+            layer="below"
         )
 
     fig.write_html('docs/index.html')
