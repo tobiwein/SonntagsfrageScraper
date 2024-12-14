@@ -42,10 +42,8 @@ def create_html_from_data(file):
 
     # Create the plot
     fig = px.line(df, x='date', y='percentage', text='percentage', color='party', title=f'Sonntagsfrage (Last update: {last_update})',
-                 labels={'date': 'Date', 'value': 'Percentage', 'party': 'Party'}, markers=True)
-
-    # Add error bars for uncertainty
-    fig.update_traces(error_y=dict(type='date', array=df['uncertainty'], visible=True))
+                 labels={'date': 'Date', 'value': 'Percentage', 'party': 'Party'},
+                 markers=True, error_y='uncertainty', textposition='top center')
 
     # Add red background below y = 5
     fig.add_shape(
