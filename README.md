@@ -11,7 +11,7 @@ The latest visualizations and data are available on the GitHub Page:
 
 **Automated Scraping**: Retrieves data from specified polling sources.
 
-**GitHub Action for Weekly Updates**: Automatically updates the data weekly using a GitHub Action on the auto_data_update branch.
+**GitHub Action for Weekly Updates**: Automatically updates the data nightly using a GitHub Action on the `auto_data_update` branch.
 
 **Data Processing**: Cleans and structures raw data for analysis.
 
@@ -40,7 +40,7 @@ This format makes it easy to parse, update, and analyze the data programmaticall
 
 ## GitHub Actions
 
-The repository includes a scheduled GitHub Action configured to run weekly on the `auto_data_update` branch. This action fetches the latest data and ensures the repository stays up-to-date without manual intervention.
+The repository includes a scheduled GitHub Action configured to run nightly at 3 a.m. UTC on the `auto_data_update` branch. This action fetches the latest data and ensures the repository stays up-to-date without manual intervention.
 
 To see the action logs or status, visit the Actions tab.
 
@@ -84,7 +84,7 @@ To see the action logs or status, visit the Actions tab.
     python analyze.py
     ```
 
-3. Generate the HTML page for the GitHub page:
+3. ***Optional:*** Generate the HTML page for the GitHub page:
     ```sh
     python page_update.py
     ```
