@@ -2,6 +2,11 @@
 
 SonntagsfrageScraper is a lightweight and efficient tool for scraping, analyzing, and visualizing public opinion poll data related to the "Sonntagsfrage" (a recurring German political opinion poll). This repository provides tools to collect data, process it into a structured format, and create insights that are easy to interpret.
 
+## GitHub Page
+
+The latest visualizations and data are available on the GitHub Page:
+[SonntagsfrageScraper GitHub Page](https://tobiwein.github.io/SonntagsfrageScraper/)
+
 ## Features
 
 **Automated Scraping**: Retrieves data from specified polling sources.
@@ -46,10 +51,11 @@ To see the action logs or status, visit the Actions tab.
 ### Libraries:
 
 - `requests`
-
 - `pandas`
-
 - `matplotlib`
+- `beautifulsoup4`
+- `python-dotenv`
+- `plotly`
 
 (Add any other libraries your project uses)
 
@@ -69,16 +75,19 @@ To see the action logs or status, visit the Actions tab.
 ## Usage
 
 1. Run the scraper to fetch the latest data:
+    ```sh
+    python scrape.py
+    ```
 
-```sh
-python scrape.py
-```
+2. Process the data and create visualizations:
+    ```sh
+    python analyze.py
+    ```
 
-2. Process the data and generate visualizations:
-
-```sh
-python analyze.py
-```
+3. Generate the HTML page for the GitHub page:
+    ```sh
+    python page_update.py
+    ```
 
 ## Example Output
 
