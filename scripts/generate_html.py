@@ -35,9 +35,18 @@ def create_html_from_data(file):
     # Get the date of the last update
     last_update = datetime.now().strftime('%d.%m.%Y %H:%M:%S')
 
+    # Get the latest percentage for each party
+    latest_percentages = df.sort_values('date').groupby('party').last().reset_index()
+    df = df.merge(latest_percentages[['party', 'percentage']], on='party', suffixes=('', '_latest'))
+    df['party'] = df.apply(lambda row: f"{row['party']} ({row['percentage_latest']:.1f}%)", axis=1)
+
     # Create the plot
-    fig = px.line(df, x='date', y='percentage', color='party', title=f'Sonntagsfrage trends (Last update: {last_update})',
+    fig = px.line(df, x='date', y='percentage', color='party', title=f'Sonntagsfrage (Last update: {last_update})',
                  labels={'date': 'Date', 'value': 'Percentage', 'party': 'Party'},)
+
+    # Add error bars for uncertainty
+    fig.update_traces(error_y=dict(type='data', array=df['uncertainty'], visible=True))
+
     # Add red background below y = 5
     fig.add_shape(
         type="rect",
