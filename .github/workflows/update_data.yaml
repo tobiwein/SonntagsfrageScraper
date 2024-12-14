@@ -2,11 +2,11 @@ name: Update Data
 
 on:
   schedule:
-    - cron: '0 0 * * 0' # Runs every Sunday at midnight
-  workflow_dispatch: # Allows manual triggering of the workflow
+    - cron: '0 3 * * *' # Runs every day at 3 am UTC
+  workflow_dispatch:
 
 env:
-  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  GITHUB_TOKEN: ${{ secrets.BOT_PAT }}
   BRANCH: auto_data_update
 
 jobs:
