@@ -41,10 +41,9 @@ def create_html_from_data(file):
     df['party'] = df.apply(lambda row: f"{row['party']} ({row['percentage_latest']:.1f}%)", axis=1)
 
     # Create the plot
-    fig = px.line(df, x='date', y='percentage', text='percentage', color='party', title=f'Sonntagsfrage (Last update: {last_update})',
+    fig = px.line(df, x='date', y='percentage', color='party', title=f'Sonntagsfrage (Last update: {last_update})',
                  labels={'date': 'Date', 'value': 'Percentage', 'party': 'Party'},
                  markers=True, error_y='uncertainty')
-    fig.update_traces(textposition='top center')
 
     # Add red background below y = 5
     fig.add_shape(
@@ -59,17 +58,17 @@ def create_html_from_data(file):
     )
 
     # Add vertical lines at each date
-    for date in df['date'].unique():
-        fig.add_shape(
-            type="line",
-            x0=date,
-            x1=date,
-            y0=0,
-            y1=1,
-            xref='x',
-            yref='paper',
-            line=dict(color="LightSeaGreen", width=1),
-            layer="below"
-        )
+#    for date in df['date'].unique():
+#        fig.add_shape(
+#            type="line",
+#            x0=date,
+#            x1=date,
+#            y0=0,
+#            y1=1,
+#            xref='x',
+#            yref='paper',
+#            line=dict(color="LightSeaGreen", width=1),
+#            layer="below"
+#        )
 
     fig.write_html('docs/index.html')
