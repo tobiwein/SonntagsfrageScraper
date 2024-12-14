@@ -43,7 +43,7 @@ def create_html_from_data(file):
     # Create the plot
     fig = px.line(df, x='date', y='percentage', text='percentage', color='party', title=f'Sonntagsfrage (Last update: {last_update})',
                  labels={'date': 'Date', 'value': 'Percentage', 'party': 'Party'},
-                 markers=True, error_y='uncertainty', textposition='top center')
+                 markers=True, error_y='uncertainty')
 
     # Add red background below y = 5
     fig.add_shape(
