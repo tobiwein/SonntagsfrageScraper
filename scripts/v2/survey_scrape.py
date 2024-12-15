@@ -157,9 +157,17 @@ def extract_surveyer_data_from_body(table_body, header_data):
                     row_data[attribute] = 0
 
             elif attribute == "surveyed_count":
+                survey_type = "standard"
+                if cell.find("a") is not None:
+                    cell_a_tag = cell.find("a")
+                    cell_a_tag_text = cell_a_tag.get_text()
+                    if cell_a_tag_text  == "O":
+                        survey_type = "online"
+                        cell_text = cell_text.replace("•", "").strip()
+                        
                 try:
                     surveyed_count = int(cell_text.replace(".", "").strip())
-                    row_data[attribute] = surveyed_count
+                    row_data[attribute] = {"count": surveyed_count, "type": survey_type}
                 except ValueError:
                     logging.warning(f"Could not convert {cell_text} to int")
                     row_data[attribute] = 0
