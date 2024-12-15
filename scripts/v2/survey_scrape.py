@@ -7,24 +7,11 @@ from bs4 import BeautifulSoup
 from datetime import datetime
 import logging
 
+from objects.html import attributes
+
 logging.basicConfig(level=logging.INFO)
 
 # Mapping of party names to attribute names
-attributes = {
-    "dat": "publication_date",
-    "dat2": "collection_period",
-    "befr": "surveyed_count",
-    "non": "non_voters",
-    "CDU/CSU": "cdu_csu",
-    "SPD": "spd",
-    "GRÜNE": "gruene",
-    "FDP": "fdp",
-    "LINKE": "linke",
-    "AfD": "afd",
-    "Sonstige": "sonstige",
-    "BSW": "bsw",
-    "FW": "fw",
-}
 
 def get_soup(url):
     """
@@ -92,7 +79,7 @@ def extract_surveyer_data_from_header(table_head):
         if header_classes is None:
             if header.find("a") is not None:
                 party_name = header.find("a").get_text()
-                attribute_list.append(f'party-{attributes[party_name]}')
+                attribute_list.append(attributes[party_name])
             else:
                 logging.warning("No header class found")
                 attribute_list.append("unknown")
@@ -100,7 +87,7 @@ def extract_surveyer_data_from_header(table_head):
             header_class = header_classes[0]
             if header_class == "part":
                 party_name = header.get_text()
-                attribute_list.append(f'party-{attributes[party_name]}')
+                attribute_list.append(attributes[party_name])
                 continue
 
             attribute = attributes[header_class]
