@@ -17,12 +17,11 @@ def merge_party_data(old_data, new_data):
     Returns:
     dict: The merged party data.
     """
-    for party, data in new_data.items():
-        if party not in old_data:
-            old_data[party] = data
+    for attr, data in new_data.items():
+        if attr in old_data:
+            old_data[attr].update(data)
         else:
-            for date, values in data.items():
-                old_data[party][date] = values
+            old_data[attr] = data
     return old_data
 
 def store_surveyer_data(surveyer_data, file):
@@ -35,7 +34,7 @@ def store_surveyer_data(surveyer_data, file):
     """
     # Load existing data
     try:
-        existing_data = load_party_data(file)
+        existing_data = load_surveyer_data(file)
     except FileNotFoundError:
         existing_data = {}
 
@@ -54,15 +53,47 @@ def store_surveyer_data(surveyer_data, file):
 
     return combined_data
 
-def load_party_data(file):
+def load_surveyer_data(file):
     """
-    Loads and cleans party data from the database.
+    Loads party data from the database.
 
     Parameters:
     file (str): The path to the database file.
 
     Returns:
-    dict: A dictionary of cleaned party data.
+    dict: A dictionary of party data.
     """
-    party_data = {}
-    date_pattern = r"\d{2}\.\d{2}\.\d{4}"  # Regex for DD.MM.YYYY format
+    with open(file, "r") as f:
+        data = f.read()
+
+    # Split data by new line
+    data = data.split("\n")
+
+    # Initialize variables
+    surveyer_data = {}
+    current_date = None
+    current_data = {}
+
+    # Parse data
+    for line in data:
+        # Check if line is empty
+        if not line:
+            if current_date is not None:
+                surveyer_data[current_date] = current_data
+                current_data = {}
+            continue
+
+        # Split line by colon
+        key, value = line.split(":", 1)
+        key = key.strip()
+        value = value.strip()
+
+        # Check if key is a date
+        if key == "dat" and re.match(r"\d{2}\.\d{2}\.\d{4}", value):
+            current_date = value
+            continue
+
+        # Add data to current data
+        current_data[key] = value
+
+    return surveyer_data

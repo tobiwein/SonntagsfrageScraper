@@ -150,7 +150,16 @@ def extract_surveyer_data_from_body(table_body, header_data):
                     cell_a_tag_text = cell_a_tag.get_text()
                     if cell_a_tag_text  == "O":
                         survey_type = "online"
-                        cell_text = cell_text.replace("•", "").strip()
+                        cell_text = cell_text.replace("O", "").replace("•", "").strip()
+                    elif cell_a_tag_text == "T":
+                        survey_type = "telephone"
+                        cell_text = cell_text.replace("T", "").replace("•", "").strip()
+                    elif cell_a_tag_text == "P":
+                        survey_type = "personal"
+                        cell_text = cell_text.replace("P", "").replace("•", "").strip()
+                    elif cell_a_tag_text == "TOM":
+                        survey_type = "telephone_online_mix"
+                        cell_text = cell_text.replace("TOM", "").replace("•", "").strip()
                         
                 try:
                     surveyed_count = int(cell_text.replace(".", "").strip())
