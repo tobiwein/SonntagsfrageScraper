@@ -187,3 +187,95 @@ def extract_data(url):
     party_data = sort_data(party_data)
     party_data = extract_min_max(party_data)
     return party_data
+
+def extract_surveyer_data_table(soup):
+    """
+    Extracts the table head and body from the surveyer data table.
+
+    Parameters:
+    soup (BeautifulSoup): The BeautifulSoup object containing the parsed HTML content.
+
+    Returns:
+    tuple: A tuple containing the table head and body (BeautifulSoup objects).
+    """
+    data_table = soup.find("table")
+    if data_table is None:
+        logging.error("No table found")
+        raise Exception("No table found")
+
+    data_table_head = soup.find("thead")
+    if data_table_head is None:
+        logging.error("No table head found")
+        raise Exception("No table head found")
+
+    data_table_body = soup.find("tbody")
+    if data_table_body is None:
+        logging.error("No table body found")
+        raise Exception("No table body found")
+
+    return data_table_head, data_table_body
+
+attributes = {
+    "dat": "date",
+    "dat2": "collection_period",
+    "befr": "surveyed_count",
+    "non": "non_voters",
+    "CDU/CSU": "cdu_csu",
+    "SPD": "spd",
+    "GRÜNE": "gruene",
+    "FDP": "fdp",
+    "LINKE": "linke",
+    "AfD": "afd",
+    "Sonstige": "sonstige",
+    "BSW": "bsw",
+    "FW": "fw",
+}
+
+def extract_surveyer_data_from_header(table_head):
+    """
+    Extracts the attribute list from the table head.
+
+    Parameters:
+    table_head (BeautifulSoup): The table head (BeautifulSoup object).
+
+    Returns:
+    list: A list of attribute strings.
+    """
+    headers = table_head.find_all("th")
+    if headers is None:
+        logging.error("No headers found")
+        raise Exception("No headers found")
+    
+
+    attribute_list = []
+    for header in headers:
+        header_classes = header.attrs.get("class")
+        if header_classes is None:
+            if header.find("a") is not None:
+                party_name = header.find("a").get_text()
+                attribute_list.append(attributes[party_name])
+            else:
+                logging.warning("No header class found")
+                attribute_list.append("unknown")
+        else:
+            header_class = header_classes[0]
+            if header_class == "part":
+                party_name = header.get_text()
+                attribute_list.append(attributes[party_name])
+                continue
+
+            attribute = attributes[header_class]
+            if attribute is None:
+                logging.warning(f"Unknown header class: {header_class}")
+                attribute_list.append("unknown")
+            else:
+                if header_class == "dat2" and header.get_text() != "Zeitraum":
+                    attribute = attributes["non"]
+                attribute_list.append(attribute)
+
+    return attribute_list
+
+def extract_surveyer_data(url):
+    soup = get_soup(url)
+    table_head, table_body = extract_surveyer_data_table(soup)
+    parties = extract_surveyer_data_from_header(table_head)

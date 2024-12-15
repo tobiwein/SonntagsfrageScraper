@@ -16,8 +16,9 @@ file = os.getenv("DATABASE_FILE")
 
 def main():
     try:
-        party_data = survey_scrape.extract_data(url)
-        db.store_party_data(party_data, file)
+        survey_scrape.extract_surveyer_data("https://www.wahlrecht.de/umfragen/forsa.htm")
+        #party_data = survey_scrape.extract_data(url)
+        #db.store_party_data(party_data, file)
     except Exception as e:
         logging.error(f"An error occurred: {e}")
 
