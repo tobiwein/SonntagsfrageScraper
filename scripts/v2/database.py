@@ -1,38 +1,49 @@
 """
-This module contains functions for interacting with the database.
+This module contains functions for interacting with the database for survey data.
 """
 
 import re
 
 from objects.html import attributes
 
-def merge_party_data(old_data, new_data):
+def merge_surveyer_data(old_data, new_data):
     """
-    Merges new party data with the existing party data.
+    Merges old data with new data.
 
     Parameters:
-    old_data (dict): The existing party data.
-    new_data (dict): The new party data to be merged.
+    old_data (dict): A dictionary of old data.
+    new_data (dict): A dictionary of new data.
 
     Returns:
-    dict: The merged party data.
+    dict: A dictionary of merged data.
     """
-    for attr, data in new_data.items():
-        if attr in old_data:
-            old_data[attr].update(data)
+    # Initialize variables
+    merged_data = old_data
+
+    # Merge data
+    for date, data in new_data.items():
+        if date in merged_data:
+            for attribute, value in data.items():
+                if attribute in attributes.values():
+                    key = list(attributes.keys())[list(attributes.values()).index(attribute)]
+                    
+                    merged_data[date][key] = value
         else:
-            old_data[attr] = data
-    return old_data
+            merged_data[date] = data
+
+    return merged_data
 
 def store_surveyer_data(surveyer_data, file):
     """
-    Stores party data in the database.
+    Stores surveyer data in the database.
 
     Parameters:
-    party_data (dict): A dictionary of party data.
+    surveyer_data (dict): A dictionary of surveyer data.
     file (str): The path to the database file.
+
+    Returns:
+    dict: A dictionary of stored surveyer data.
     """
-    # Load existing data
     try:
         existing_data = load_surveyer_data(file)
     except FileNotFoundError:
@@ -40,7 +51,7 @@ def store_surveyer_data(surveyer_data, file):
 
     # Merge new data with existing data
     combined_data = surveyer_data
-    #combined_data = merge_party_data(existing_data, surveyer_data)
+    combined_data = merge_surveyer_data(existing_data, surveyer_data)
     
     # Save combined data
     with open(file, "w") as f:
@@ -55,13 +66,13 @@ def store_surveyer_data(surveyer_data, file):
 
 def load_surveyer_data(file):
     """
-    Loads party data from the database.
+    Loads surveyer data from the database.
 
     Parameters:
     file (str): The path to the database file.
 
     Returns:
-    dict: A dictionary of party data.
+    dict: A dictionary of surveyer data.
     """
     with open(file, "r") as f:
         data = f.read()
