@@ -2,8 +2,9 @@
 Main script to plot the extracted survey data.
 """
 
-from scripts import database as db
-from scripts import my_plotter as plt
+from scripts.v2 import database as db
+from scripts.v2 import survey_plotter as plt
+from objects.urls import surveyers
 from dotenv import load_dotenv
 import os
 import logging
@@ -26,8 +27,8 @@ party_colors = {
 
 def main():
     try:
-        party_data = db.load_party_data(file)
-        plt.plot_party_data(party_data, party_colors)
+        surveyer_data = db.load_surveyer_data(surveyers[0]["file"])
+        plt.plot_surveyer_data(surveyer_data, party_colors)
     except Exception as e:
         logging.error(f"An error occurred: {e}")
 
