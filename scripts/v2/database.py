@@ -3,6 +3,7 @@ This module contains functions for interacting with the database for survey data
 """
 
 import re
+import logging
 
 from objects.html import attributes
 
@@ -26,7 +27,10 @@ def merge_surveyer_data(old_data, new_data):
             for attribute, value in data.items():
                 if attribute in attributes.values():
                     key = list(attributes.keys())[list(attributes.values()).index(attribute)]
-                    
+                    old_value = merged_data[date].get(key)
+                    if old_value is not None:
+                        if old_value != value:
+                            logging.warning(f"Data conflict for {date} ({key}): {old_value} vs {value}")
                     merged_data[date][key] = value
         else:
             merged_data[date] = data
