@@ -4,6 +4,7 @@ This module contains functions to scrape survey data from the website https://ww
 
 import requests
 from bs4 import BeautifulSoup
+import bs4
 from datetime import datetime
 import logging
 
@@ -121,12 +122,22 @@ def extract_surveyer_data_from_body(table_body, header_data):
         cells = body_row.find_all("td")
         row_data = {}
         if len(cells) != len(header_data):
-            logging.warning("Number of cells does not match number of headers")
-            continue
+            last_cell = cells[-1]
+            last_cell_colspan = last_cell.attrs.get("colspan")
+            last_cell_link = last_cell.find("a")
+            if last_cell_colspan is not None and last_cell_link is not None:
+                if last_cell.get_text() == "Bundestagswahl":
+                    cells[-1] = "btw"
+            else:
+                logging.warning("Number of cells does not match number of headers")
+                continue
 
         for index, cell in enumerate(cells):
             attribute = header_data[index]
-            cell_text = cell.get_text()
+            if isinstance(cell, bs4.element.Tag):
+                cell_text = cell.get_text()
+            else:
+                cell_text = cell
             if attribute == "publication_date":
                 try:
                     datetime.strptime(cell_text, "%d.%m.%Y")
@@ -147,6 +158,10 @@ def extract_surveyer_data_from_body(table_body, header_data):
                     row_data[attribute] = 0
 
             elif attribute == "surveyed_count":
+                if cell_text == "btw": # Bundestagswahl
+                    row_data[attribute] = {"count": None, "type": "btw"}
+                    row_data["collection_period"] = {"start": None, "end": None, "average": None}
+                    continue
                 survey_type = "standard"
                 if cell.find("a") is not None:
                     cell_a_tag = cell.find("a")
@@ -188,6 +203,12 @@ def extract_surveyer_data_from_body(table_body, header_data):
                 except ValueError:
                     logging.warning(f"Invalid date format: {cell_text}")
                     row_data[attribute] = {"start": None, "end": None, "average": None}
+
+            else:
+                if attribute == "space":
+                    continue
+                else:
+                    logging.warning(f"Unknown attribute: {attribute}")
 
         body_data[row_data["publication_date"]] = row_data
 
