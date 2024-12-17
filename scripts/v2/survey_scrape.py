@@ -81,8 +81,11 @@ def extract_surveyer_data_from_header(table_head):
                 party_name = header.find("a").get_text()
                 attribute_list.append(attributes[party_name])
             else:
-                logging.warning("No header class found")
-                attribute_list.append("unknown")
+                if header.get_text() != "\xa0": # \xa0 is a non-breaking space
+                    logging.warning("No header class found")
+                    attribute_list.append("unknown")
+                else:
+                    attribute_list.append("space")
         else:
             header_class = header_classes[0]
             if header_class == "part":
