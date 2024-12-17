@@ -105,6 +105,22 @@ def extract_surveyer_data_from_header(table_head):
 
     return attribute_list
 
+def clean_date(date):
+    """
+    Cleans the date string by removing leading and trailing whitespaces.
+
+    Parameters:
+    date (str): The date string to clean.
+
+    Returns:
+    str: The cleaned date string.
+    """
+    if not date.endswith("."):
+        date = date + "."
+    if date == "29.02.":
+        date = "28.02."
+    return date
+
 def extract_surveyer_data_from_body(table_body, header_data):
     """
     Extracts the surveyer data from the table body.
@@ -146,7 +162,7 @@ def extract_surveyer_data_from_body(table_body, header_data):
                     logging.warning(f"Invalid date format: {cell_text}")
                     break
 
-            elif attribute.startswith("party-") or attribute == "non":
+            elif attribute.startswith("party-") or attribute == "non_voters":
                 cell_text = cell_text.replace(",", ".").replace("%", "").strip()
                 if cell_text == "–" or cell_text == "":
                     cell_text = "0"
@@ -190,10 +206,17 @@ def extract_surveyer_data_from_body(table_body, header_data):
                     row_data[attribute] = 0
 
             elif attribute == "collection_period":
+                if cell_text == "Bundestagswahl": # Bundestagswahl
+                    row_data[attribute] = {"start": None, "end": None, "average": None}
+                    continue
+
                 try:
                     start_date, end_date = cell_text.split("–")
                 except ValueError:
                     start_date = end_date = cell_text
+
+                start_date = clean_date(start_date)
+                end_date = clean_date(end_date)
 
                 try:
                     start_date = datetime.strptime(start_date.strip(), "%d.%m.")
