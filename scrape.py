@@ -2,8 +2,8 @@
 Main script to extract survey data.
 """
 
-from scripts import survey_scrape
-from scripts import database as db
+from scripts.v1 import survey_scrape
+from scripts.v1 import database as db
 from dotenv import load_dotenv
 import os
 import logging

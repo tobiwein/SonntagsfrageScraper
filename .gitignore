@@ -5,3 +5,6 @@
 **/*.pyw
 **/*.pyz
 **/*.pyzw
+
+data/**
+!data/v1/**

@@ -21,7 +21,7 @@ def main():
             surveyer_name = surveyer["name"]
             logging.info(f"Extracting data from {surveyer_name}...")
             surveyer_data = survey_scrape.extract_surveyer_data(surveyer["url"])
-            db.store_surveyer_data(surveyer_data, surveyer["file"])
+            #db.store_surveyer_data(surveyer_data, surveyer["file"])
     except Exception as e:
         logging.error(f"An error occurred: {e}")
 

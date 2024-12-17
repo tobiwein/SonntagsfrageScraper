@@ -2,8 +2,8 @@
 Main script to plot the extracted survey data.
 """
 
-from scripts import database as db
-from scripts import my_plotter as plt
+from scripts.v1 import database as db
+from scripts.v1 import my_plotter as plt
 from dotenv import load_dotenv
 import os
 import logging

@@ -2,7 +2,7 @@
 Main script to transform the data into html for the GitHub page.
 """
 
-from scripts import generate_html as html
+from scripts.v1 import generate_html as html
 from dotenv import load_dotenv
 import os
 import logging
