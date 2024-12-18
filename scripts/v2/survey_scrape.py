@@ -103,6 +103,12 @@ def extract_surveyer_data_from_header(table_head):
                     attribute = attributes["non"]
                 attribute_list.append(attribute)
 
+    header_td = table_head.find_all("td")
+    if header_td is not None and len(header_td) > 0:
+        attribute_list.append(attribute_list[-1])
+        attribute_list[-2] = attribute_list[-3]
+        attribute_list[-3] = "space"
+
     return attribute_list
 
 def clean_date(date):
